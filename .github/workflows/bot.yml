@@ -1,0 +1,27 @@
+name: Python Bot Auto Run
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # প্রতি ৩০ মিনিটে run
+  push:
+    branches: [ main ]
+  workflow_dispatch:      # manual trigger
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run bot
+      run: python main.py
+      env:
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
